@@ -1,8 +1,5 @@
-console.log("NC Software Engine");
-console.log("Version 0.01 Build 001");
+import { Engine } from "./core/Engine.js";
 
-const app = document.getElementById("app");
+const engine = new Engine();
 
-if (app) {
-    app.textContent = "NC Software Engine Initialized";
-}
+engine.initialize();
