@@ -1,3 +1,5 @@
+import { Logger } from "../utilities/Logger.js";
+
 export class Engine {
     public readonly name = "NC Software Engine";
     public readonly version = "0.01";
@@ -9,8 +11,8 @@ export class Engine {
     private context!: CanvasRenderingContext2D;
 
     constructor() {
-        console.log(this.name);
-        console.log(`Version ${this.version} Build ${this.build}`);
+        Logger.info(this.name);
+        Logger.info(`Version ${this.version} Build ${this.build}`);
     }
 
     public initialize(): void {
@@ -18,6 +20,8 @@ export class Engine {
         const app = document.getElementById("app");
 
         if (!app) {
+            Logger.error("App container not found.");
+
             throw new Error("App container not found.");
         }
 
@@ -26,6 +30,8 @@ export class Engine {
         const context = this.canvas.getContext("2d");
 
         if (!context) {
+            Logger.error("Canvas 2D context not supported.");
+
             throw new Error("Canvas 2D context not supported.");
         }
 
@@ -39,8 +45,8 @@ export class Engine {
             this.resizeCanvas();
         });
 
-        console.log("Canvas created.");
-        console.log("Engine initialized.");
+        Logger.info("Canvas created.");
+        Logger.info("Engine initialized.");
     }
 
     public start(): void {
@@ -51,7 +57,7 @@ export class Engine {
 
         this.running = true;
 
-        console.log("Engine started.");
+        Logger.info("Engine started.");
 
         requestAnimationFrame(this.loop);
     }
@@ -96,6 +102,6 @@ export class Engine {
 
         this.running = false;
 
-        console.log("Engine stopped.");
+        Logger.info("Engine stopped.");
     }
 }
