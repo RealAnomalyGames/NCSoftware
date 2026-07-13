@@ -1,9 +1,12 @@
 export class Engine {
-    public readonly name: string = "NC Software Engine";
-    public readonly version: string = "0.01";
-    public readonly build: string = "001";
+    public readonly name = "NC Software Engine";
+    public readonly version = "0.01";
+    public readonly build = "001";
 
-    private running: boolean = false;
+    private running = false;
+
+    private canvas!: HTMLCanvasElement;
+    private context!: CanvasRenderingContext2D;
 
     constructor() {
         console.log(this.name);
@@ -11,16 +14,37 @@ export class Engine {
     }
 
     public initialize(): void {
+
         const app = document.getElementById("app");
 
-        if (app) {
-            app.textContent = `${this.name} Ready`;
+        if (!app) {
+            throw new Error("App container not found.");
         }
 
+        this.canvas = document.createElement("canvas");
+
+        const context = this.canvas.getContext("2d");
+
+        if (!context) {
+            throw new Error("Canvas 2D context not supported.");
+        }
+
+        this.context = context;
+
+        app.appendChild(this.canvas);
+
+        this.resizeCanvas();
+
+        window.addEventListener("resize", () => {
+            this.resizeCanvas();
+        });
+
+        console.log("Canvas created.");
         console.log("Engine initialized.");
     }
 
     public start(): void {
+
         if (this.running) {
             return;
         }
@@ -33,6 +57,7 @@ export class Engine {
     }
 
     private loop = (timestamp: number): void => {
+
         if (!this.running) {
             return;
         }
@@ -44,15 +69,31 @@ export class Engine {
         requestAnimationFrame(this.loop);
     };
 
-    private update(timestamp: number): void {
-        // Game logic will go here.
+    private update(_timestamp: number): void {
+
     }
 
     private render(): void {
-        // Rendering will go here.
+
+        this.context.fillStyle = "#202124";
+
+        this.context.fillRect(
+            0,
+            0,
+            this.canvas.width,
+            this.canvas.height
+        );
+    }
+
+    private resizeCanvas(): void {
+
+        this.canvas.width = window.innerWidth;
+
+        this.canvas.height = window.innerHeight;
     }
 
     public stop(): void {
+
         this.running = false;
 
         console.log("Engine stopped.");
