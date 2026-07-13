@@ -1,37 +1,84 @@
-#splash-screen {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
+#editor {
     width: 100vw;
     height: 100vh;
 
     display: flex;
     flex-direction: column;
 
-    justify-content: center;
-    align-items: center;
-
-    background: #202124;
+    background: #2b2b2b;
 
     color: white;
 
     font-family: Arial, Helvetica, sans-serif;
-
-    z-index: 9999;
 }
 
-#splash-screen h1 {
-    margin: 0;
+#toolbar {
+    height: 40px;
 
-    font-size: 42px;
+    background: #3a3a3a;
+
+    display: flex;
+
+    align-items: center;
+
+    padding-left: 12px;
+
+    border-bottom: 1px solid #555;
 }
 
-#splash-screen p {
-    margin-top: 12px;
+#workspace {
+    flex: 1;
 
-    font-size: 18px;
+    display: grid;
 
-    color: #bdbdbd;
+    grid-template-columns: 220px 1fr 260px;
+
+    overflow: hidden;
+}
+
+#hierarchy {
+
+    background: #323232;
+
+    padding: 12px;
+
+    border-right: 1px solid #555;
+}
+
+#scene-view {
+
+    position: relative;
+
+    background: #202124;
+
+    overflow: hidden;
+}
+
+#scene-view canvas {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+}
+
+#inspector {
+
+    background: #323232;
+
+    padding: 12px;
+
+    border-left: 1px solid #555;
+}
+
+#console-panel {
+
+    height: 140px;
+
+    background: #1d1d1d;
+
+    border-top: 1px solid #555;
+
+    padding: 12px;
 }

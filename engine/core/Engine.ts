@@ -1,5 +1,6 @@
 import { EngineConfig } from "../config/EngineConfig.js";
 import { Logger } from "../utilities/Logger.js";
+import { EditorUI } from "../../editor/ui/EditorUI.js";
 
 export class Engine {
     public readonly name = EngineConfig.engineName;
@@ -7,6 +8,8 @@ export class Engine {
     public readonly build = EngineConfig.build;
 
     private running = false;
+
+    private editor = new EditorUI();
 
     private canvas!: HTMLCanvasElement;
     private context!: CanvasRenderingContext2D;
@@ -52,7 +55,19 @@ export class Engine {
 
                 this.context = context;
 
-                app.appendChild(this.canvas);
+                this.editor.build(app);
+
+                const sceneView = document.getElementById("scene-view");
+
+                if (!sceneView) {
+
+                    Logger.error("Scene View not found.");
+
+                    throw new Error("Scene View not found.");
+
+                }
+
+                sceneView.appendChild(this.canvas);
 
                 this.resizeCanvas();
 
@@ -122,9 +137,14 @@ export class Engine {
 
     private resizeCanvas(): void {
 
-        this.canvas.width = window.innerWidth;
+        const sceneView = document.getElementById("scene-view");
 
-        this.canvas.height = window.innerHeight;
+        if (!sceneView) {
+            return;
+        }
+
+        this.canvas.width = sceneView.clientWidth;
+        this.canvas.height = sceneView.clientHeight;
     }
 
     public stop(): void {
