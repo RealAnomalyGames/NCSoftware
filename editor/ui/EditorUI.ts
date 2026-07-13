@@ -6,7 +6,13 @@ export class EditorUI {
             <div id="editor">
 
                 <header id="toolbar">
-                    Toolbar
+
+                    <span>NC Software Engine</span>
+
+                    <span id="engine-version">
+                        Version 0.01 (Build 001)
+                    </span>
+
                 </header>
 
                 <div id="workspace">
