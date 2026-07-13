@@ -18,38 +18,60 @@ export class Engine {
         Logger.info(`Author: ${EngineConfig.author}`);
     }
 
-    public initialize(): void {
+    public async initialize(): Promise<void> {
 
-        const app = document.getElementById("app");
+        const splash = this.showSplash();
 
-        if (!app) {
-            Logger.error("App container not found.");
+        return new Promise((resolve) => {
 
-            throw new Error("App container not found.");
-        }
+            setTimeout(() => {
 
-        this.canvas = document.createElement("canvas");
+                this.hideSplash(splash);
 
-        const context = this.canvas.getContext("2d");
+                const app = document.getElementById("app");
 
-        if (!context) {
-            Logger.error("Canvas 2D context not supported.");
+                if (!app) {
 
-            throw new Error("Canvas 2D context not supported.");
-        }
+                    Logger.error("App container not found.");
 
-        this.context = context;
+                    throw new Error("App container not found.");
 
-        app.appendChild(this.canvas);
+                }
 
-        this.resizeCanvas();
+                this.canvas = document.createElement("canvas");
 
-        window.addEventListener("resize", () => {
-            this.resizeCanvas();
+                const context = this.canvas.getContext("2d");
+
+                if (!context) {
+
+                    Logger.error("Canvas 2D context not supported.");
+
+                    throw new Error("Canvas 2D context not supported.");
+
+                }
+
+                this.context = context;
+
+                app.appendChild(this.canvas);
+
+                this.resizeCanvas();
+
+                window.addEventListener("resize", () => {
+
+                    this.resizeCanvas();
+
+                });
+
+                Logger.info("Canvas created.");
+
+                Logger.info("Engine initialized.");
+
+                resolve();
+
+            }, 2000);
+        
         });
 
-        Logger.info("Canvas created.");
-        Logger.info("Engine initialized.");
     }
 
     public start(): void {
@@ -110,5 +132,27 @@ export class Engine {
         this.running = false;
 
         Logger.info("Engine stopped.");
+    }
+
+    private showSplash(): HTMLDivElement {
+
+        const splash = document.createElement("div");
+
+        splash.id = "splash-screen";
+
+        splash.innerHTML = `
+            <h1>${this.name}</h1>
+            <p>Version ${this.version} Build ${this.build}</p>
+        `;
+
+        document.body.appendChild(splash);
+
+        return splash;
+    }
+
+    private hideSplash(splash: HTMLDivElement): void {
+
+        splash.remove();
+
     }
 }
