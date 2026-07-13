@@ -1,9 +1,10 @@
+import { EngineConfig } from "../config/EngineConfig.js";
 import { Logger } from "../utilities/Logger.js";
 
 export class Engine {
-    public readonly name = "NC Software Engine";
-    public readonly version = "0.01";
-    public readonly build = "001";
+    public readonly name = EngineConfig.engineName;
+    public readonly version = EngineConfig.version;
+    public readonly build = EngineConfig.build;
 
     private running = false;
 
@@ -13,6 +14,8 @@ export class Engine {
     constructor() {
         Logger.info(this.name);
         Logger.info(`Version ${this.version} Build ${this.build}`);
+        Logger.info(`Project: ${EngineConfig.projectName}`);
+        Logger.info(`Author: ${EngineConfig.author}`);
     }
 
     public initialize(): void {
@@ -60,6 +63,10 @@ export class Engine {
         Logger.info("Engine started.");
 
         requestAnimationFrame(this.loop);
+    }
+
+    public getConfig() {
+        return EngineConfig;
     }
 
     private loop = (timestamp: number): void => {
