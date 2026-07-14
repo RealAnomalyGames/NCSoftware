@@ -1,24 +1,32 @@
 import { EngineConfig } from "../config/EngineConfig.js";
 import { Logger } from "../utilities/Logger.js";
+import { Renderer } from "../rendering/Renderer.js";
 import { EditorUI } from "../../editor/ui/EditorUI.js";
 
 export class Engine {
+
     public readonly name = EngineConfig.engineName;
+
     public readonly version = EngineConfig.version;
+
     public readonly build = EngineConfig.build;
 
     private running = false;
 
     private editor = new EditorUI();
 
-    private canvas!: HTMLCanvasElement;
-    private context!: CanvasRenderingContext2D;
+    private renderer = new Renderer();
 
     constructor() {
+
         Logger.info(this.name);
+
         Logger.info(`Version ${this.version} Build ${this.build}`);
+
         Logger.info(`Project: ${EngineConfig.projectName}`);
+
         Logger.info(`Author: ${EngineConfig.author}`);
+
     }
 
     public async initialize(): Promise<void> {
@@ -41,20 +49,6 @@ export class Engine {
 
                 }
 
-                this.canvas = document.createElement("canvas");
-
-                const context = this.canvas.getContext("2d");
-
-                if (!context) {
-
-                    Logger.error("Canvas 2D context not supported.");
-
-                    throw new Error("Canvas 2D context not supported.");
-
-                }
-
-                this.context = context;
-
                 this.editor.build(app);
 
                 const sceneView = document.getElementById("scene-view");
@@ -67,24 +61,14 @@ export class Engine {
 
                 }
 
-                sceneView.appendChild(this.canvas);
-
-                this.resizeCanvas();
-
-                window.addEventListener("resize", () => {
-
-                    this.resizeCanvas();
-
-                });
-
-                Logger.info("Canvas created.");
+                this.renderer.initialize(sceneView);
 
                 Logger.info("Engine initialized.");
 
                 resolve();
 
             }, 2000);
-        
+
         });
 
     }
@@ -92,7 +76,9 @@ export class Engine {
     public start(): void {
 
         if (this.running) {
+
             return;
+
         }
 
         this.running = true;
@@ -100,51 +86,13 @@ export class Engine {
         Logger.info("Engine started.");
 
         requestAnimationFrame(this.loop);
+
     }
 
-    public getConfig() {
+    public getConfig(): typeof EngineConfig {
+
         return EngineConfig;
-    }
 
-    private loop = (timestamp: number): void => {
-
-        if (!this.running) {
-            return;
-        }
-
-        this.update(timestamp);
-
-        this.render();
-
-        requestAnimationFrame(this.loop);
-    };
-
-    private update(_timestamp: number): void {
-
-    }
-
-    private render(): void {
-
-        this.context.fillStyle = "#202124";
-
-        this.context.fillRect(
-            0,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
-    }
-
-    private resizeCanvas(): void {
-
-        const sceneView = document.getElementById("scene-view");
-
-        if (!sceneView) {
-            return;
-        }
-
-        this.canvas.width = sceneView.clientWidth;
-        this.canvas.height = sceneView.clientHeight;
     }
 
     public stop(): void {
@@ -152,6 +100,7 @@ export class Engine {
         this.running = false;
 
         Logger.info("Engine stopped.");
+
     }
 
     private showSplash(): HTMLDivElement {
@@ -168,6 +117,7 @@ export class Engine {
         document.body.appendChild(splash);
 
         return splash;
+
     }
 
     private hideSplash(splash: HTMLDivElement): void {
@@ -175,4 +125,25 @@ export class Engine {
         splash.remove();
 
     }
+
+    private loop = (timestamp: number): void => {
+
+        if (!this.running) {
+
+            return;
+
+        }
+
+        this.update(timestamp);
+
+        this.renderer.render();
+
+        requestAnimationFrame(this.loop);
+
+    };
+
+    private update(_timestamp: number): void {
+
+    }
+
 }
