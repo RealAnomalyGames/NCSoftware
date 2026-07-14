@@ -6,9 +6,33 @@ export class Renderer {
 
     private context!: CanvasRenderingContext2D;
 
+    private parent!: HTMLElement;
+
+    private backgroundColor = "#202124";
+
     public initialize(parent: HTMLElement): void {
 
+        this.parent = parent;
+
+        this.createCanvas();
+
+        this.resize();
+
+        window.addEventListener("resize", () => {
+
+            this.resize();
+
+        });
+
+        Logger.info("Renderer initialized.");
+
+    }
+
+    private createCanvas(): void {
+
         this.canvas = document.createElement("canvas");
+
+        this.canvas.id = "engine-canvas";
 
         const context = this.canvas.getContext("2d");
 
@@ -22,23 +46,21 @@ export class Renderer {
 
         this.context = context;
 
-        parent.appendChild(this.canvas);
-
-        this.resize(parent);
-
-        window.addEventListener("resize", () => {
-
-            this.resize(parent);
-
-        });
-
-        Logger.info("Renderer initialized.");
+        this.parent.appendChild(this.canvas);
 
     }
 
-    public render(): void {
+    public resize(): void {
 
-        this.context.fillStyle = "#202124";
+        this.canvas.width = this.parent.clientWidth;
+
+        this.canvas.height = this.parent.clientHeight;
+
+    }
+
+    public clear(): void {
+
+        this.context.fillStyle = this.backgroundColor;
 
         this.context.fillRect(
 
@@ -51,11 +73,33 @@ export class Renderer {
 
     }
 
-    public resize(parent: HTMLElement): void {
+    public render(): void {
 
-        this.canvas.width = parent.clientWidth;
+        this.clear();
 
-        this.canvas.height = parent.clientHeight;
+    }
+
+    public setBackgroundColor(color: string): void {
+
+        this.backgroundColor = color;
+
+    }
+
+    public getBackgroundColor(): string {
+
+        return this.backgroundColor;
+
+    }
+
+    public getWidth(): number {
+
+        return this.canvas.width;
+
+    }
+
+    public getHeight(): number {
+
+        return this.canvas.height;
 
     }
 

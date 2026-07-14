@@ -2,6 +2,8 @@ import { EngineConfig } from "../config/EngineConfig.js";
 import { Logger } from "../utilities/Logger.js";
 import { Renderer } from "../rendering/Renderer.js";
 import { EditorUI } from "../../editor/ui/EditorUI.js";
+import { Input } from "../input/Input.js";
+import { Time } from "../time/Time.js";
 
 export class Engine {
 
@@ -16,6 +18,10 @@ export class Engine {
     private editor = new EditorUI();
 
     private renderer = new Renderer();
+
+    private input = new Input();
+
+    private time = new Time();
 
     constructor() {
 
@@ -63,6 +69,8 @@ export class Engine {
 
                 this.renderer.initialize(sceneView);
 
+                this.input.initialize();
+
                 Logger.info("Engine initialized.");
 
                 resolve();
@@ -86,6 +94,12 @@ export class Engine {
         Logger.info("Engine started.");
 
         requestAnimationFrame(this.loop);
+
+    }
+
+    public getTime(): Time {
+
+        return this.time;
 
     }
 
@@ -134,15 +148,17 @@ export class Engine {
 
         }
 
-        this.update(timestamp);
+        this.time.update(timestamp);
+
+        this.update();
 
         this.renderer.render();
 
         requestAnimationFrame(this.loop);
 
-    };
+};
 
-    private update(_timestamp: number): void {
+    private update(): void {
 
     }
 
