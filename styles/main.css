@@ -27,6 +27,35 @@
     padding: 0 15px;
 
     border-bottom: 1px solid #555;
+
+}
+
+#toolbar-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+#fps-counter {
+
+    color: #7CFC00;
+
+    font-size: 13px;
+
+    font-family: Consolas, monospace;
+
+}
+
+#engine-version {
+
+    color: #bbbbbb;
+
+    font-size: 13px;
+
 }
 
 #engine-version {

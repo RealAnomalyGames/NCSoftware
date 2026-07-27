@@ -23,6 +23,8 @@ export class Engine {
 
     private time = new Time();
 
+    private fpsLabel: HTMLElement | null = null;
+
     constructor() {
 
         Logger.info(this.name);
@@ -56,6 +58,8 @@ export class Engine {
                 }
 
                 this.editor.build(app);
+
+                this.fpsLabel = document.getElementById("fps-counter");
 
                 const sceneView = document.getElementById("scene-view");
 
@@ -159,6 +163,12 @@ export class Engine {
 };
 
     private update(): void {
+
+        if (this.fpsLabel) {
+
+            this.fpsLabel.textContent = `FPS: ${this.time.getFPS()}`;
+
+        }
 
     }
 

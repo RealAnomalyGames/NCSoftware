@@ -9,9 +9,17 @@ export class EditorUI {
 
                     <span>NC Software Engine</span>
 
-                    <span id="engine-version">
-                        Version 0.01 (Build 001)
-                    </span>
+                    <div id="toolbar-info">
+
+                        <span id="fps-counter">
+                            FPS: --
+                        </span>
+
+                        <span id="engine-version">
+                            Version 0.01 (Build 002)
+                        </span>
+
+                    </div>
 
                 </header>
 
