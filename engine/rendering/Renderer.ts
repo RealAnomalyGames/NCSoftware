@@ -1,4 +1,5 @@
 import { Logger } from "../utilities/Logger.js";
+import { Camera2D } from "../graphics/Camera2D.js";
 
 export class Renderer {
 
@@ -9,6 +10,8 @@ export class Renderer {
     private parent!: HTMLElement;
 
     private backgroundColor = "#202124";
+
+    private camera: Camera2D | null = null;
 
     public initialize(parent: HTMLElement): void {
 
@@ -60,6 +63,17 @@ export class Renderer {
 
     public clear(): void {
 
+        this.context.setTransform(
+
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+
+        );
+
         this.context.fillStyle = this.backgroundColor;
 
         this.context.fillRect(
@@ -77,11 +91,34 @@ export class Renderer {
 
         this.clear();
 
+        if (!this.camera) {
+
+            return;
+
+        }
+
+        this.context.setTransform(
+
+            this.camera.getZoom(),
+            0,
+            0,
+            this.camera.getZoom(),
+            -this.camera.getX(),
+            -this.camera.getY()
+
+        );
+
     }
 
     public setBackgroundColor(color: string): void {
 
         this.backgroundColor = color;
+
+    }
+
+    public setCamera(camera: Camera2D): void {
+
+        this.camera = camera;
 
     }
 

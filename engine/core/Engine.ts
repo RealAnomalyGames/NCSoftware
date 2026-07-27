@@ -6,6 +6,7 @@ import { Input } from "../input/Input.js";
 import { Time } from "../time/Time.js";
 import { SceneManager } from "../scene/SceneManager.js";
 import { EmptyScene } from "../scene/EmptyScene.js";
+import { Camera2D } from "../graphics/Camera2D.js";
 
 export class Engine {
 
@@ -28,6 +29,8 @@ export class Engine {
     private fpsLabel: HTMLElement | null = null;
 
     private sceneManager = new SceneManager();
+
+    private camera = new Camera2D();
 
     constructor() {
 
@@ -77,6 +80,8 @@ export class Engine {
 
                 this.renderer.initialize(sceneView);
 
+                this.renderer.setCamera(this.camera);
+
                 this.input.initialize();
 
                 this.sceneManager.loadScene(
@@ -92,6 +97,12 @@ export class Engine {
             }, 2000);
 
         });
+
+    }
+
+    public getCamera(): Camera2D {
+
+        return this.camera;
 
     }
 
