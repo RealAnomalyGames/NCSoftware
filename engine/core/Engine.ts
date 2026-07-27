@@ -4,6 +4,8 @@ import { Renderer } from "../rendering/Renderer.js";
 import { EditorUI } from "../../editor/ui/EditorUI.js";
 import { Input } from "../input/Input.js";
 import { Time } from "../time/Time.js";
+import { SceneManager } from "../scene/SceneManager.js";
+import { EmptyScene } from "../scene/EmptyScene.js";
 
 export class Engine {
 
@@ -24,6 +26,8 @@ export class Engine {
     private time = new Time();
 
     private fpsLabel: HTMLElement | null = null;
+
+    private sceneManager = new SceneManager();
 
     constructor() {
 
@@ -75,6 +79,12 @@ export class Engine {
 
                 this.input.initialize();
 
+                this.sceneManager.loadScene(
+
+                    new EmptyScene()
+
+                );
+
                 Logger.info("Engine initialized.");
 
                 resolve();
@@ -104,6 +114,12 @@ export class Engine {
     public getTime(): Time {
 
         return this.time;
+
+    }
+
+    public getSceneManager(): SceneManager {
+
+        return this.sceneManager;
 
     }
 
@@ -156,7 +172,11 @@ export class Engine {
 
         this.update();
 
+        this.sceneManager.update();
+
         this.renderer.render();
+
+        this.sceneManager.render();
 
         requestAnimationFrame(this.loop);
 
